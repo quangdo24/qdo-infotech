@@ -1,68 +1,45 @@
 import React from 'react';
 import { Github, Linkedin, Mail } from 'lucide-react';
+import { siteConfig } from '../siteConfig';
 
 export const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-24 bg-background relative border-t border-border">
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-16">
-          
-          {/* About Column */}
-          <div>
-            <div className="flex items-end gap-4 mb-8">
-              <h2 className="text-3xl font-bold tracking-tight">ABOUT_ME</h2>
-              <span className="font-mono text-zinc-500 mb-1">/003</span>
-            </div>
-            <div className="prose prose-invert">
-              <p className="text-zinc-400 leading-relaxed mb-4">
-                I am an IT specialist focusing on networking and system administration. 
-                I specialize in troubleshooting, setting up, and deploying systems to ensure optimal performance.
-              </p>
-              <p className="text-zinc-400 leading-relaxed">
-                Dedicated to maintaining secure, efficient infrastructures and resolving complex technical challenges.
-              </p>
-            </div>
-          </div>
+    <section id="contact" className="py-24 bg-surface relative border-t border-border">
+      <div className="max-w-3xl mx-auto px-6 text-center">
+        <p className="text-accent text-xs font-medium tracking-[0.3em] uppercase mb-3">Let's connect</p>
+        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-stone-100 mb-4">Get in touch</h2>
+        <p className="text-stone-400 max-w-lg mx-auto leading-relaxed mb-10">
+          Have a project, opportunity, or just want to talk tech? My inbox is always open.
+        </p>
 
-          {/* Contact Column */}
-          <div className="md:border-l md:border-border md:pl-16">
-            <div className="flex items-end gap-4 mb-8">
-              <h2 className="text-3xl font-bold tracking-tight">CONNECT</h2>
-            </div>
-            
-            <div className="flex flex-col gap-6">
-              <p className="text-sm font-mono text-zinc-500 uppercase tracking-widest">
-                Transmissions
-              </p>
-              
-              <a href="mailto:qdo.thien@outlook.com" className="group flex items-center gap-4 text-zinc-300 hover:text-white transition-colors">
-                <div className="p-2 border border-zinc-700 group-hover:border-white transition-colors">
-                  <Mail size={18} />
-                </div>
-                <span className="font-mono text-sm">qdo.thien@outlook.com</span>
-              </a>
-
-              <a href="https://github.com/quangdo24" target="_blank" rel="noreferrer" className="group flex items-center gap-4 text-zinc-300 hover:text-white transition-colors">
-                <div className="p-2 border border-zinc-700 group-hover:border-white transition-colors">
-                  <Github size={18} />
-                </div>
-                <span className="font-mono text-sm">github.com/quangdo24</span>
-              </a>
-
-              <a href="https://linkedin.com/in/doq18" target="_blank" rel="noreferrer" className="group flex items-center gap-4 text-zinc-300 hover:text-white transition-colors">
-                <div className="p-2 border border-zinc-700 group-hover:border-white transition-colors">
-                  <Linkedin size={18} />
-                </div>
-                <span className="font-mono text-sm">linkedin.com/in/doq18</span>
-              </a>
-            </div>
-          </div>
-
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <a
+            href={`mailto:${siteConfig.email}`}
+            className="flex items-center gap-3 px-6 py-3 rounded-full bg-accent text-stone-950 font-medium text-sm hover:bg-accent/90 transition-colors"
+          >
+            <Mail size={16} /> {siteConfig.email}
+          </a>
+          <a
+            href={siteConfig.githubUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-3 px-5 py-3 rounded-full border border-border text-stone-300 text-sm hover:border-accent/50 hover:text-white transition-colors"
+          >
+            <Github size={16} /> GitHub
+          </a>
+          <a
+            href={siteConfig.linkedinUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-3 px-5 py-3 rounded-full border border-border text-stone-300 text-sm hover:border-accent/50 hover:text-white transition-colors"
+          >
+            <Linkedin size={16} /> LinkedIn
+          </a>
         </div>
 
-        <div className="mt-24 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center text-zinc-600 text-xs font-mono">
-          <p>© 2025 QDO-INFOTECH. ALL RIGHTS RESERVED.</p>
-          <p className="mt-2 md:mt-0">SYSTEM STATUS: OPERATIONAL</p>
+        <div className="mt-20 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center text-stone-600 text-xs gap-2">
+          <p>© {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p>
+          <p>Built with React, Tailwind &amp; the GitHub API.</p>
         </div>
       </div>
     </section>

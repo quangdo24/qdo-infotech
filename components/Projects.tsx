@@ -1,91 +1,141 @@
-import React from 'react';
-import { Github } from 'lucide-react';
-import { Project } from '../types';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { ExternalLink, Star, GitFork, Github } from 'lucide-react';
+import { fetchGithubRepos, formatRelativeTime, GitHubRepo } from '../lib/github';
+import { siteConfig } from '../siteConfig';
 
-const projects: Project[] = [
-  {
-    id: '1',
-    title: 'Coming Soon',
-    description: '...',
-    tags: [],
-    imageUrl: 'https://picsum.photos/seed/tech1/600/400',
-    link: '#'
-  },
-  {
-    id: '2',
-    title: 'Coming Soon',
-    description: '...',
-    tags: [],
-    imageUrl: 'https://picsum.photos/seed/tech2/600/400',
-    link: '#'
-  },
-  {
-    id: '3',
-    title: 'Coming Soon',
-    description: '..',
-    tags: [],
-    imageUrl: 'https://picsum.photos/seed/tech3/600/400',
-    link: '#'
-  }
-];
+const languageColors: Record<string, string> = {
+  TypeScript: '#3178c6',
+  JavaScript: '#f1e05a',
+  Python: '#3572A5',
+  HTML: '#e34c26',
+  CSS: '#563d7c',
+  Shell: '#89e051',
+  Java: '#b07219',
+  'C++': '#f34b7d',
+  C: '#555555',
+  Go: '#00ADD8',
+  Rust: '#dea584',
+};
 
 export const Projects: React.FC = () => {
+  const [repos, setRepos] = useState<GitHubRepo[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetchGithubRepos(siteConfig.githubUsername, siteConfig.projectsLimit)
+      .then((data) => {
+        if (active) setRepos(data);
+      })
+      .catch(() => {
+        if (active) setError("Couldn't load projects from GitHub right now.");
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <section id="projects" className="py-24 bg-surface relative border-t border-border">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-10 w-px h-full bg-border opacity-50 hidden md:block" />
-      <div className="absolute top-0 left-10 w-px h-full bg-border opacity-50 hidden md:block" />
-
       <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-end gap-4 mb-16">
-          <h2 className="text-4xl font-bold tracking-tight">PROJECT_INDEX</h2>
-          <span className="font-mono text-zinc-500 mb-2">/002</span>
+        <div className="flex items-end justify-between gap-4 mb-16 flex-wrap">
+          <div>
+            <p className="text-accent text-xs font-medium tracking-[0.3em] uppercase mb-3">
+              What I've been building
+            </p>
+            <h2 className="text-3xl md:text-4xl font-serif font-semibold text-stone-100">Projects</h2>
+          </div>
+          <a
+            href={`${siteConfig.githubUrl}?tab=repositories`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 text-sm text-stone-400 hover:text-accent transition-colors"
+          >
+            View all on GitHub <ExternalLink size={14} />
+          </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <div key={project.id} className="group relative bg-background border border-border hover:border-zinc-500 transition-colors duration-300">
-              {/* Image Container */}
-              <div className="aspect-video w-full overflow-hidden bg-zinc-900 border-b border-border">
-                <img 
-                  src={project.imageUrl} 
-                  alt={project.title}
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 grayscale group-hover:grayscale-0"
-                />
-              </div>
+        {error && (
+          <div className="text-center text-stone-500 py-12 border border-dashed border-border rounded-2xl">
+            <p>{error}</p>
+            <a
+              href={siteConfig.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 mt-4 text-accent hover:underline"
+            >
+              <Github size={16} /> Visit GitHub profile
+            </a>
+          </div>
+        )}
 
-              {/* Content */}
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-bold tracking-wide">{project.title}</h3>
-                  <span className="font-mono text-xs text-zinc-500">0{index + 1}</span>
+        {!error && !repos && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-48 rounded-2xl border border-border bg-background/40 animate-pulse" />
+            ))}
+          </div>
+        )}
+
+        {!error && repos && repos.length === 0 && (
+          <div className="text-center text-stone-500 py-12 border border-dashed border-border rounded-2xl">
+            No public repositories yet — check back soon.
+          </div>
+        )}
+
+        {!error && repos && repos.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {repos.map((repo, index) => (
+              <motion.a
+                key={repo.id}
+                href={repo.html_url}
+                target="_blank"
+                rel="noreferrer"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="group flex flex-col justify-between p-6 rounded-2xl border border-border bg-background/60 hover:border-accent/40 hover:-translate-y-1 transition-all duration-300"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <h3 className="text-lg font-semibold text-stone-100 group-hover:text-accent transition-colors break-all">
+                      {repo.name}
+                    </h3>
+                    <ExternalLink
+                      size={16}
+                      className="text-stone-600 group-hover:text-accent transition-colors shrink-0 mt-1"
+                    />
+                  </div>
+                  <p className="text-stone-400 text-sm leading-relaxed mb-6 line-clamp-3">
+                    {repo.description || 'No description provided yet.'}
+                  </p>
                 </div>
-                
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6 h-20">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tags.map(tag => (
-                    <span key={tag} className="px-2 py-1 bg-zinc-900 border border-zinc-800 text-[10px] uppercase tracking-wider text-zinc-400 font-mono">
-                      {tag}
+                <div className="flex items-center justify-between text-xs text-stone-500 pt-4 border-t border-border">
+                  <div className="flex items-center gap-4">
+                    {repo.language && (
+                      <span className="flex items-center gap-1.5">
+                        <span
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: languageColors[repo.language] || '#78716c' }}
+                        />
+                        {repo.language}
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1">
+                      <Star size={12} /> {repo.stargazers_count}
                     </span>
-                  ))}
+                    <span className="flex items-center gap-1">
+                      <GitFork size={12} /> {repo.forks_count}
+                    </span>
+                  </div>
+                  <span>{formatRelativeTime(repo.pushed_at)}</span>
                 </div>
-
-                <div className="flex gap-4 border-t border-border pt-4">
-                  <a href={project.link} className="flex items-center gap-2 text-xs font-mono uppercase text-zinc-400 hover:text-white transition-colors">
-                    <Github size={14} /> Source
-                  </a>
-                </div>
-              </div>
-
-              {/* Corner Accents */}
-              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-          ))}
-        </div>
+              </motion.a>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
