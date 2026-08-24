@@ -53,7 +53,7 @@ export const Contact: React.FC = () => {
                 <div className="p-2 border border-zinc-700 group-hover:border-white transition-colors">
                   <Linkedin size={18} />
                 </div>
-                <span className="font-mono text-sm">linkedin.com/in/doq18t</span>
+                <span className="font-mono text-sm">linkedin.com/in/doq18</span>
               </a>
             </div>
           </div>
