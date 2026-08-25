@@ -2,10 +2,7 @@
 // Everything on the site (nav, hero, contact, projects, activity) reads from here.
 export const siteConfig = {
   name: 'Quang Do',
-  bio:
-    "I'm an IT specialist who loves keeping systems running smoothly and shipping " +
-    "side projects on the side. These days I'm spending my free time exploring AI " +
-    'tooling, networking automation, and building small, useful software.',
+  bio: 'IT professional focused on networking, cybersecurity, and the intersection of AI and infrastructure.',
 
   // Drop a photo named "profile.jpg" (or .png) into the /public folder and it will
   // automatically replace the placeholder initials avatar below.

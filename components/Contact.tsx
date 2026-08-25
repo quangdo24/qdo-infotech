@@ -8,9 +8,6 @@ export const Contact: React.FC = () => {
       <div className="max-w-3xl mx-auto px-6 text-center">
         <p className="text-accent text-xs font-medium tracking-[0.3em] uppercase mb-3">Let's connect</p>
         <h2 className="text-3xl md:text-4xl font-serif font-semibold text-stone-100 mb-4">Get in touch</h2>
-        <p className="text-stone-400 max-w-lg mx-auto leading-relaxed mb-10">
-          Have a project, opportunity, or just want to talk tech? My inbox is always open.
-        </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
           <a
