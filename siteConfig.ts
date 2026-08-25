@@ -18,5 +18,5 @@ export const siteConfig = {
 
   // How many GitHub repos / activity items to show.
   projectsLimit: 6,
-  activityLimit: 8,
+  activityLimit: 25,
 };
